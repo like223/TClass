@@ -1,24 +1,22 @@
 package com.teoan.tclass.common.config;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-import java.util.List;
-
 /**
  * @author Teoan
  * @date 2021/5/26 14:27
  */
 @Configuration
+@EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
@@ -54,14 +52,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 "/swagger-ui.html",
                 "/webjars/**",
                 "/api/**/v2/api-docs",
-                "/actuator/**")
+                        "/actuator/**",
+                        "/oauth/login", //放行登录接口和验证码接口
+                        "/oauth/verifyCode.jpg",
+                        "/avatar/get/**", //放行头像接口
+                        "/admin/template")
                 .permitAll()
-//                .antMatchers(resourcePermitAllPaths) //配置配置文件中的路径
-//                .permitAll()
-//                "/oauth/login",     //放行登录接口和验证码接口
-//                "/oauth/verifyCode.jpg",
-//                "/avatar/get/**",//放行头像接口 TODO 记录一个坑
-//                "/admin/template")    //放行导入模板
+                .antMatchers(resourcePermitAllPaths) //配置配置文件中的路径
+                .permitAll()
         .antMatchers("/admin/**").hasRole("admin").anyRequest().authenticated();
     }
 }
