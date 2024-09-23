@@ -1,7 +1,6 @@
 package com.teoan.tclass.controller;
 
 import com.baomidou.mybatisplus.extension.api.ApiController;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.google.code.kaptcha.Producer;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +17,6 @@ import java.time.Duration;
 
 /**
  * @author Teoan
- * @description
- * @date 2020/7/28 16:21
  */
 @RestController
 public class LoginController extends ApiController {
@@ -34,7 +31,6 @@ public class LoginController extends ApiController {
     public void getVerifyCode(HttpServletResponse resp, HttpSession session) throws IOException {
         resp.setContentType("image/jpeg");
         String text = producer.createText();
-//        session.setAttribute("verify_code", text);
 
         //使用sessionId作为key，并设置验证码过期时间
         stringRedisTemplate.opsForValue().set(session.getId()+"verify_code",text,Duration.ofSeconds(30));
